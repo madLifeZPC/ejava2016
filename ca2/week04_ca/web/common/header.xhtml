@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <b:navBar brand="NoticeBoard" brandHref="/week04_ca/faces/index.xhtml?faces-redirect=true" inverse="true" fixed="top">           
+                <h:form styleClass="navbar-form navbar-right" rendered="#{not loginView.isLogin()}">
+                    <b:commandButton action="#{loginView.loginView()}" value="Sign In" look="success" />
+                    #{' '}
+                    <b:commandButton action="#{registerView.registerView()}" value="Register Now" look="primary"  />
+                </h:form>
+                <h:form styleClass="navbar-form navbar-right" rendered="#{loginView.isLogin()}">
+                    <h:commandLink value="#{loginView.getLoginUser()}" style="color: #9d9d9d" action="/user/menu.xhtml?faces-redirect=true" />
+                    <b:commandButton action="#{loginView.logout()}" style="margin-left: 20px;" value="Sign Out" look="danger"  />       
+                </h:form>
+            </b:navBar>
+        </ui:composition>
+    </h:body>
+</html>
+

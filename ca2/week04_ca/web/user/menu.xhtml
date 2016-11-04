@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">        
+    <h:body>
+        <ui:composition template="/common/template.xhtml">		
+            <ui:define name="content">
+                <b:container style="width: 800px;margin-top: 20px;">
+                    <b:panel title="Creat Note" look="success">
+                        <h:form id="postNotes">    
+                            <b:inputText id="title" value="#{noteView.title}" label="Title" renderLabel="true" />   
+                            <h:outputLabel value="Category" for="category" />
+                            <b:selectOneMenu value="#{noteView.category}" id="category" >
+                                <f:selectItem itemLabel="Social" itemValue="Social"/>
+                                <f:selectItem itemLabel="For Sale" itemValue="For Sale"/>
+                                <f:selectItem itemLabel="Jobs" itemValue="Jobs"/>
+                                <f:selectItem itemLabel="Tuition" itemValue="Tuition"/>
+                            </b:selectOneMenu>
+                            <h:outputLabel value="Content" for="content" />
+                            <b:inputTextarea placeholder="Type content here..." value="#{noteView.content}" id="content">
+                            </b:inputTextarea>
+                            <h:message for="postNotes"></h:message>
+                            <b:commandButton update="notesTable" value="Post" look="success" action="#{noteView.post()}"/>
+                        </h:form>
+                    </b:panel>
+                    <b:panel title="Posted Notes" look="success">
+                        <h:form id="notesTable">
+                            <b:dataTable value="#{noteView.notes}"
+                                         var="note"
+                                         id="table"
+                                         fixedHeader="true"
+                                         scroll-size="400px"
+                                         scroll-x="false"
+                                         responsive="true"
+                                         searching="false">
+                                <b:dataTableColumn value="#{note.title}" />
+                                <b:dataTableColumn value="#{note.category}" />
+                                <b:dataTableColumn value="#{note.date}" />
+                                <b:dataTableColumn value="#{note.content}" />
+                             </b:dataTable>
+                        </h:form>   
+                        
+                    </b:panel>
+                </b:container>
+            </ui:define> 	
+        </ui:composition> 
+    </h:body>
+</html>
+
