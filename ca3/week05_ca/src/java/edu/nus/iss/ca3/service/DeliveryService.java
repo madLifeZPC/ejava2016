@@ -25,11 +25,22 @@ public class DeliveryService {
     public void addDelivery( Delivery delivery ){
         if( delivery!=null )
         {
-            em.persist(delivery);
+            int deliveryId = addDeliveryWithoutPod(delivery);
+            delivery.setId(deliveryId);
             Pod pod = new Pod();
             pod.setDelivery(delivery);
             em.persist(pod);
         }       
+    }
+    
+    public int addDeliveryWithoutPod( Delivery delivery ){
+        if( delivery!=null )
+        {
+            em.persist(delivery);
+            em.flush();
+            return delivery.getId();
+        }
+        return 0;
     }
     
     public List<Delivery> findAllByName(String name) {
