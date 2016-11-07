@@ -83,14 +83,13 @@ public class UploadServlet extends HttpServlet{
                 MediaType.APPLICATION_OCTET_STREAM_TYPE);
         imgPart.setContentDisposition(
                 FormDataContentDisposition.name("image")
-                .fileName("ca3.jpg").build());
+                .fileName(req.getParameter("podId")).build());
 
         MultiPart formData = new FormDataMultiPart()
                 .field("teamId", "2e6fae47", MediaType.TEXT_PLAIN_TYPE)
                 .field("podId", podId, MediaType.TEXT_PLAIN_TYPE)
                 .field("note", note, MediaType.TEXT_PLAIN_TYPE)
-                .field("callback", "http://172.23.133.161:8080/week05_ca/api/pod", MediaType.TEXT_PLAIN_TYPE)
-                .field("time", Long.toString(System.currentTimeMillis()), MediaType.TEXT_PLAIN_TYPE)
+                .field("callback", "http://10.10.24.248:8080/week05_ca/api/pod", MediaType.TEXT_PLAIN_TYPE)
                 .bodyPart(imgPart);
         formData.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
 
