@@ -19,31 +19,31 @@ import javax.persistence.TypedQuery;
  */
 @Stateless
 public class PodService {
-    
-    @PersistenceContext private EntityManager em;
-    
-    public void addPod( Pod pod ){
-         if( pod!=null )
-         {
+
+    @PersistenceContext(unitName = "week05_PU")
+    private EntityManager em;
+
+    public void addPod(Pod pod) {
+        if (pod != null) {
             em.persist(pod);
-         }       
+        }
     }
-    
-    public void updatePod( Pod pod ) throws IllegalArgumentException{
-       if(em.find(Pod.class, pod.getId()) == null){
-           throw new IllegalArgumentException("Unknown Employee id");
-       }
-       em.merge(pod);  
+
+    public void updatePod(Pod pod) throws IllegalArgumentException {
+        if (em.find(Pod.class, pod.getId()) == null) {
+            throw new IllegalArgumentException("Unknown Employee id");
+        }
+        em.merge(pod);
     }
-    
-    public Optional<Pod> findById( int id ){
+
+    public Optional<Pod> findById(int id) {
         return Optional.ofNullable(em.find(Pod.class, id));
     }
-    
+
     public List<Pod> findAll() {
         String queryString = "select p from Pod p";
         TypedQuery<Pod> query = em.createQuery(queryString, Pod.class);
         return query.getResultList();
     }
-    
+
 }

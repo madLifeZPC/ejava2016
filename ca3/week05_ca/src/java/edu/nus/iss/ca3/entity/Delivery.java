@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,6 +25,7 @@ public class Delivery implements Serializable {
 
     @Id
     @Column(name = "pkg_id")
+    @GeneratedValue(strategy=IDENTITY)
     private int id;
 
     @Column(name = "name")

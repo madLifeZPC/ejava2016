@@ -20,7 +20,7 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class DeliveryService {
     
-    @PersistenceContext private EntityManager em;
+    @PersistenceContext( unitName = "week05_PU") private EntityManager em;
     
     public void addDelivery( Delivery delivery ){
         if( delivery!=null )
@@ -38,6 +38,7 @@ public class DeliveryService {
         {
             em.persist(delivery);
             em.flush();
+            System.out.println(">>> delivery id: " + delivery.getId());
             return delivery.getId();
         }
         return 0;

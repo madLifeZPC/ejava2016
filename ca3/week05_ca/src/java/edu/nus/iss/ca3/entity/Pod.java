@@ -9,8 +9,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
@@ -18,9 +22,11 @@ import javax.persistence.OneToOne;
  *
  * @author madLife
  */
+@Entity
 public class Pod implements Serializable{
     
     @Id
+    @GeneratedValue(strategy=IDENTITY)
     @Column(name = "pod_id")
     private int id;
 
@@ -39,6 +45,7 @@ public class Pod implements Serializable{
     private Timestamp delivery_date;
 
     @OneToOne
+    @JoinColumn(name = "pkg_id", referencedColumnName = "pkg_id")
     private Delivery delivery;
 
     public int getId() {
