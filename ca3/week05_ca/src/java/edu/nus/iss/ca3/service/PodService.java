@@ -6,9 +6,11 @@
 package edu.nus.iss.ca3.service;
 
 import edu.nus.iss.ca3.entity.Pod;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -31,6 +33,12 @@ public class PodService {
            throw new IllegalArgumentException("Unknown Employee id");
        }
        em.merge(pod);  
+    }
+    
+    public List<Pod> findAll() {
+        String queryString = "select p from Pod p";
+        TypedQuery<Pod> query = em.createQuery(queryString, Pod.class);
+        return query.getResultList();
     }
     
 }
