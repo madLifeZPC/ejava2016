@@ -7,6 +7,7 @@ package edu.nus.iss.ca3.service;
 
 import edu.nus.iss.ca3.entity.Pod;
 import java.util.List;
+import java.util.Optional;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,6 +34,10 @@ public class PodService {
            throw new IllegalArgumentException("Unknown Employee id");
        }
        em.merge(pod);  
+    }
+    
+    public Optional<Pod> findById( int id ){
+        return Optional.ofNullable(em.find(Pod.class, id));
     }
     
     public List<Pod> findAll() {
