@@ -5,6 +5,7 @@
  */
 package edu.nus.iss.ca3.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ import javax.persistence.OneToOne;
  *
  * @author madLife
  */
-public class Pod {
+public class Pod implements Serializable{
     
     @Id
     @Column(name = "pod_id")
