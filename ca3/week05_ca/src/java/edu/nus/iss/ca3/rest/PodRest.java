@@ -10,8 +10,10 @@ import edu.nus.iss.ca3.async.UpdatePodTask;
 import edu.nus.iss.ca3.entity.Pod;
 import edu.nus.iss.ca3.service.PodService;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -20,11 +22,13 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -32,14 +36,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
  * @author Liu Zhenchang
  */
 @Stateless
-@Path("pod")
+@Path("/pod")
 public class PodRest {
 
     @Resource(lookup = "concurrent/ejavaThreadPool")
@@ -47,24 +52,9 @@ public class PodRest {
     @EJB
     private PodService podService;
 
-    @POST
-    @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public void update(MultivaluedMap form, @Suspended AsyncResponse async) {
-        Pod pod = new Pod();
-        pod.setId(Integer.parseInt(form.get("podId").toString()));
-        pod.setNote(form.get("note").toString());
-        byte[] image = null;
-        try {
-            image = toByteArray(form.get("image"));
-            pod.setImage(image);
-        } catch (IOException ex) {
-            Logger.getLogger(PodRest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Timestamp time = new Timestamp(Long.parseLong(form.get("time").toString()));
-        pod.setDelivery_date(time);
-        UpdatePodTask task = new UpdatePodTask(async, pod, podService);
-        executors.submit(task);
-        requestForAck(pod.getAck_id(), pod.getNote(),image);
+    @PostConstruct
+    public void initiate() {
+        System.out.println("initiate end point");
     }
 
     @GET
@@ -73,25 +63,15 @@ public class PodRest {
         executors.submit(task);
     }
 
-    private byte[] toByteArray(Object obj) throws IOException {
-        byte[] bytes = null;
-        ByteArrayOutputStream bos = null;
-        ObjectOutputStream oos = null;
-        try {
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.flush();
-            bytes = bos.toByteArray();
-        } finally {
-            if (oos != null) {
-                oos.close();
-            }
-            if (bos != null) {
-                bos.close();
-            }
+    private byte[] toByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[16384];
+        while ((nRead = is.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
         }
-        return bytes;
+        buffer.flush();
+        return buffer.toByteArray();
     }
 
     private void requestForAck(String podId, String note, byte[] image) {

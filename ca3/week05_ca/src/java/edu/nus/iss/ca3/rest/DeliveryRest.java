@@ -24,7 +24,7 @@ import javax.ws.rs.core.MediaType;
  * @author Liu Zhenchang
  */
 @Stateless
-@Path("delivery")
+@Path("/delivery")
 public class DeliveryRest {
     
     @Resource(lookup = "concurrent/ejavaThreadPool")
